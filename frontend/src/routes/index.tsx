@@ -8,6 +8,7 @@ function App() {
   return (
     <div className="text-center h-screen bg-[#282c34]">
       <p className="text-white text-2xl">Home</p>
+      <p className="text-2xl text-white">Testing the deployment Frontend</p>
     </div>
   )
 }

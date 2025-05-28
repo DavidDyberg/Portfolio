@@ -19,7 +19,7 @@ app.use("/api", projectRouter);
 app.use("/auth", authRouter);
 
 app.get("/", async (req: Request, res: Response) => {
-  res.send("Hejsan");
+  res.send("Hejsan, testar deploy av backend!");
 });
 
 app.listen(PORT, () => {
