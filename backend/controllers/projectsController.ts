@@ -36,7 +36,18 @@ export const getProjectById = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const project = await Project.create(req.body);
+    const { title, description, techStack, githubLink, liveDemo } = req.body;
+
+    const imagePath = req.file ? req.file.path : "";
+
+    const project = await Project.create({
+      title,
+      description,
+      techStack,
+      githubLink,
+      liveDemo,
+      image: imagePath,
+    });
     res
       .status(201)
       .json({ message: "New project created successfully", project });
