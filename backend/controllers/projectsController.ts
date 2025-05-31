@@ -38,7 +38,7 @@ export const createProject = async (req: Request, res: Response) => {
   try {
     const { title, description, techStack, githubLink, liveDemo } = req.body;
 
-    const imagePath = req.file ? req.file.path : "";
+    const imageUrl = req.file ? req.file.path : "";
 
     const project = await Project.create({
       title,
@@ -46,7 +46,7 @@ export const createProject = async (req: Request, res: Response) => {
       techStack,
       githubLink,
       liveDemo,
-      image: imagePath,
+      image: imageUrl,
     });
     res
       .status(201)

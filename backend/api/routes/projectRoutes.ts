@@ -7,18 +7,7 @@ import {
   updateProject,
 } from "../../controllers/projectsController";
 import { authMiddleware } from "../../middleware/authMiddleware";
-import multer from "multer";
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
+import upload from "../../middleware/upload";
 
 export const projectRouter = Router();
 
