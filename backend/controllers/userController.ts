@@ -24,28 +24,26 @@ export const createUser = async (req: Request, res: Response) => {
       password,
       age,
       bio,
-      profileImage,
       skills,
       socials,
       phoneNumber,
     } = req.body;
 
+    const imageUrl = req.file ? req.file.path : "";
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({
+    const newUser = User.create({
       firstName,
       lastName,
       email,
       password: hashedPassword,
       age,
       bio,
-      profileImage,
+      profileImage: imageUrl,
       skills,
       socials,
       phoneNumber,
     });
-
-    await newUser.save();
     res
       .status(201)
       .json({ message: "User created successfully", user: newUser });
