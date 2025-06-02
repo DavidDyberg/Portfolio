@@ -62,7 +62,7 @@ function App() {
               <ProjectCard
                 key={project._id}
                 title={project.title}
-                image={aboutQuery.data.profileImage}
+                image={project.image}
                 link={'/projects'}
               />
             ))}
