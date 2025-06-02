@@ -12,3 +12,15 @@ export type User = {
   createdAt?: string
   updatedAt?: string
 }
+
+export type Project = {
+  _id: string
+  title: string
+  description: string
+  techStack?: string[]
+  githubLink?: string
+  liveDemo?: string
+  image?: string
+  createdAt?: string
+  updatedAt?: string
+}

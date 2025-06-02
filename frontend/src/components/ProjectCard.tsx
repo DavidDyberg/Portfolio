@@ -4,7 +4,7 @@ import { cn } from '../../utils/classnames.ts'
 
 type ProjectCardProps = {
   title: string
-  image: string
+  image?: string
   link: LinkProps['to']
   className?: string
 }
