@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { fetchAbout } from '@/api-routes/about'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { ProjectCard } from '@/components/ProjectCard'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -41,8 +40,6 @@ function App() {
           />
         </div>
       </section>
-
-      {/* <ProjectCard title="IMBD CLONE" image="" link="/projects" /> */}
     </div>
   )
 }

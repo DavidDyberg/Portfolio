@@ -14,9 +14,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 }) => {
   return (
     <Link to={link}>
-      <div>
+      <div className="flex flex-col gap-4">
         <h2 className="text-white text-2xl font-semibold">{title}</h2>
-        <img className="w-xs h-64" src={image} alt="Project image" />
+        <img
+          className="w-xs h-64 rounded-2xl hover:scale-102 transition-transform duration-300"
+          src={image}
+          alt="Project image"
+        />
       </div>
     </Link>
   )
