@@ -1,16 +1,24 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { fetchAbout } from '@/api-routes/about'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { fetchPinnedProjects } from '@/api-routes/projects'
+import { ProjectCard } from '@/components/ProjectCard'
 
 export const Route = createFileRoute('/')({
   component: App,
   pendingComponent: () => <div className="text-white">Loading...</div>,
   errorComponent: () => <div>Error loading data</div>,
   loader: async ({ context: { queryClient } }) => {
-    await queryClient.prefetchQuery({
-      queryKey: ['about'],
-      queryFn: fetchAbout,
-    })
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: ['about'],
+        queryFn: fetchAbout,
+      }),
+      queryClient.prefetchQuery({
+        queryKey: ['pinnedProjects'],
+        queryFn: fetchPinnedProjects,
+      }),
+    ])
   },
 })
 
@@ -18,6 +26,11 @@ function App() {
   const aboutQuery = useSuspenseQuery({
     queryKey: ['about'],
     queryFn: fetchAbout,
+  })
+
+  const pinnedProjectsQuery = useSuspenseQuery({
+    queryKey: ['pinnedProjects'],
+    queryFn: fetchPinnedProjects,
   })
 
   return (
@@ -40,6 +53,22 @@ function App() {
           />
         </div>
       </section>
+
+      {pinnedProjectsQuery.data && (
+        <section>
+          <h2 className="text-white text-4xl">Pinned projects</h2>
+          <div className="flex items-center justify-between">
+            {pinnedProjectsQuery.data.map((project) => (
+              <ProjectCard
+                key={project._id}
+                title={project.title}
+                image={aboutQuery.data.profileImage}
+                link={'/projects'}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }
