@@ -73,7 +73,19 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = await User.findByIdAndUpdate(id, req.body);
+    const imageUrl = req.file ? req.file.path : "";
+
+    const user = await User.findByIdAndUpdate(id, {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      age: req.body.age,
+      bio: req.body.bio,
+      profileImage: imageUrl,
+      skills: req.body.skills,
+      socials: req.body.socials,
+      phoneNumber: req.body.phoneNumber,
+    });
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
