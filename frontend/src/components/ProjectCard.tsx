@@ -23,7 +23,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </h2>
         <img
           className={cn(
-            'w-xs h-64 rounded-2xl hover:scale-102 transition-transform duration-300',
+            'w-xs h-64 rounded-2xl object-cover hover:scale-102 transition-transform duration-300',
             className,
           )}
           src={image}
