@@ -14,3 +14,10 @@ export const fetchAllProjects = async () => {
   )
   return data as Project[]
 }
+
+export const fetchProject = async (projectId: string) => {
+  const { data } = await axios.get(
+    `https://portfolio-backend-mu-seven.vercel.app/api/projects/${projectId}`,
+  )
+  return data as Project
+}
