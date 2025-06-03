@@ -22,5 +22,38 @@ function RouteComponent() {
     queryFn: () => fetchProject(projectId),
   })
 
-  return <div className="text-white">{data.title}</div>
+  return (
+    <section className="mt-20">
+      <h1 className="text-5xl text-white font-medium">{data.title}</h1>
+      <div className="flex flex-col gap-6">
+        <img
+          className="w-full h-80 object-cover rounded-lg mt-10"
+          src={data.image}
+          alt={`Image of ${data.title}`}
+        />
+        <p className="text-white">{data.description}</p>
+
+        <div>
+          <h2 className="text-white text-xl">Technologies used:</h2>
+          {data.techStack && (
+            <ul className="ml-4">
+              {data.techStack.map((tech, index) => (
+                <li key={index} className="text-white list-disc">
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="text-white font-bold flex gap-6">
+          <a href={data.liveDemo} target="_blank">
+            Link to live project
+          </a>
+          <a href={data.githubLink} target="_blank">
+            Link to source code
+          </a>
+        </div>
+      </div>
+    </section>
+  )
 }
