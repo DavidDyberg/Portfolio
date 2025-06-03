@@ -1,6 +1,7 @@
 import { fetchProject } from '@/api-routes/projects'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { ArrowUpRight } from 'lucide-react'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -46,12 +47,18 @@ function RouteComponent() {
           )}
         </div>
         <div className="text-white font-bold flex gap-6">
-          <a href={data.liveDemo} target="_blank">
-            Link to live project
-          </a>
-          <a href={data.githubLink} target="_blank">
-            Link to source code
-          </a>
+          <div className="flex items-center gap-1 hover:underline">
+            <ArrowUpRight className="cursor-pointer" size={24} color="white" />
+            <a href={data.liveDemo} target="_blank">
+              Link to live project
+            </a>
+          </div>
+          <div className="flex items-center gap-1 hover:underline">
+            <ArrowUpRight className="cursor-pointer" size={24} color="white" />
+            <a href={data.githubLink} target="_blank">
+              Link to source code
+            </a>
+          </div>
         </div>
       </div>
     </section>
