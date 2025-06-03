@@ -63,7 +63,7 @@ function App() {
                 key={project._id}
                 title={project.title}
                 image={project.image}
-                link={'/projects'}
+                link={{ to: '/projects' }}
               />
             ))}
           </div>
