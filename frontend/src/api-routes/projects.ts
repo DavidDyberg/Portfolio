@@ -7,3 +7,10 @@ export const fetchPinnedProjects = async () => {
   )
   return data as Project[]
 }
+
+export const fetchAllProjects = async () => {
+  const { data } = await axios.get(
+    'https://portfolio-backend-mu-seven.vercel.app/api/projects',
+  )
+  return data as Project[]
+}
