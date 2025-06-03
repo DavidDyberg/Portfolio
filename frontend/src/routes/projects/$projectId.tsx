@@ -2,6 +2,8 @@ import { fetchProject } from '@/api-routes/projects'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
+import { useAuth } from '@/context/AuthContext'
+import { CustomButton } from '@/components/Button'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -16,6 +18,7 @@ export const Route = createFileRoute('/projects/$projectId')({
 })
 
 function RouteComponent() {
+  const { user } = useAuth()
   const { projectId } = Route.useParams()
 
   const { data } = useSuspenseQuery({
@@ -25,7 +28,15 @@ function RouteComponent() {
 
   return (
     <section className="mt-20">
-      <h1 className="text-5xl text-white font-medium">{data.title}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-5xl text-white font-medium">{data.title}</h1>
+        {user && (
+          <div className="flex items-center gap-4">
+            <CustomButton label="Edit" variant="primary" />
+            <CustomButton label="Delete" variant="secondary" />
+          </div>
+        )}
+      </div>
       <div className="flex flex-col gap-6">
         <img
           className="w-full h-80 object-cover rounded-lg mt-10"
