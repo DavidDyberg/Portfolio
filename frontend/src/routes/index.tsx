@@ -3,6 +3,7 @@ import { fetchAbout } from '@/api-routes/about'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { fetchPinnedProjects } from '@/api-routes/projects'
 import { ProjectCard } from '@/components/ProjectCard'
+import { DotGrid } from '@/components/DotGrid'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -35,7 +36,7 @@ function App() {
 
   return (
     <div className="mt-20">
-      <section className="flex items-center justify-between">
+      <section className="flex items-center justify-between relative h-screen">
         <div className="flex flex-col gap-4">
           <h1 className="text-5xl text-white font-medium">
             {aboutQuery.data.firstName} {aboutQuery.data.lastName}
@@ -45,12 +46,8 @@ function App() {
           </p>
           <p className="text-white">{aboutQuery.data.bio}</p>
         </div>
-        <div>
-          <img
-            src={aboutQuery.data.profileImage}
-            alt={`Image of ${aboutQuery.data.firstName} ${aboutQuery.data.lastName}`}
-            className="w-xs h-xs rounded-full"
-          />
+        <div className="relative grid place-content-center px-8 py-12 ">
+          <DotGrid />
         </div>
       </section>
 
