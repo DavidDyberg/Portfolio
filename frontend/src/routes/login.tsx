@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { GoogleLogin } from '@react-oauth/google'
-//import { jwtDecode } from 'jwt-decode'
 import { useAuth } from '@/context/AuthContext'
 
 export const Route = createFileRoute('/login')({
