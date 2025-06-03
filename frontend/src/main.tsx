@@ -10,6 +10,7 @@ import { routeTree } from './routeTree.gen.ts'
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import { AuthProvider } from './context/AuthContext.tsx'
 
 // Create a new router instance
 const router = createRouter({
@@ -37,9 +38,11 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <TanStackQueryProvider.Provider>
-          <RouterProvider router={router} />
-        </TanStackQueryProvider.Provider>
+        <AuthProvider>
+          <TanStackQueryProvider.Provider>
+            <RouterProvider router={router} />
+          </TanStackQueryProvider.Provider>
+        </AuthProvider>
       </GoogleOAuthProvider>
     </StrictMode>,
   )
