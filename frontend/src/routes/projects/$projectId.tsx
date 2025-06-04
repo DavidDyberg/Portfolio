@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -26,14 +27,63 @@ function RouteComponent() {
     queryFn: () => fetchProject(projectId),
   })
 
+  const [isEditing, setIsEditing] = useState(false)
+  const [formData, setFormData] = useState({
+    title: data.title,
+    description: data.description,
+    image: data.image,
+    techStack: data.techStack || [],
+    liveDemo: data.liveDemo,
+    githubLink: data.githubLink,
+  })
+
+  const handelResetFormData = () => {
+    setFormData({
+      title: data.title,
+      description: data.description,
+      image: data.image,
+      techStack: data.techStack || [],
+      liveDemo: data.liveDemo,
+      githubLink: data.githubLink,
+    })
+  }
+
   return (
     <section className="mt-20">
       <div className="flex items-center justify-between">
-        <h1 className="text-5xl text-white font-medium">{data.title}</h1>
+        {isEditing ? (
+          <input
+            className="text-5xl text-white font-medium border-1 border-indigo-400"
+            type="text"
+            value={formData.title}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
+            placeholder="Project Title"
+            size={formData.title.length - 0.1}
+          />
+        ) : (
+          <h1 className="text-5xl text-white font-medium">{data.title}</h1>
+        )}
         {user && (
           <div className="flex items-center gap-4">
-            <CustomButton label="Edit" variant="primary" />
-            <CustomButton label="Delete" variant="secondary" />
+            <CustomButton
+              onClick={() => setIsEditing(true)}
+              label="Edit"
+              variant="primary"
+            />
+            {isEditing ? (
+              <CustomButton
+                label="Exit edit mode"
+                variant="secondary"
+                onClick={() => {
+                  setIsEditing(false)
+                  handelResetFormData()
+                }}
+              />
+            ) : (
+              <CustomButton label="Delete" variant="secondary" />
+            )}
           </div>
         )}
       </div>
