@@ -88,24 +88,47 @@ function RouteComponent() {
         )}
       </div>
       <div className="flex flex-col gap-6">
-        <div className="relative w-full h-80 mt-10 rounded-lg overflow-hidden group">
-          <img
-            className={`w-full h-80 object-cover rounded-lg mt-10 ${isEditing ? 'cursor-pointer hover:blur-xs' : ''}`}
-            src={data.image}
-            alt={`Image of ${data.title}`}
-          />
-          {isEditing && (
-            <div className="absolute inset-0 flex items-center justify-center text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-              <p className="text-white text-lg font-semibold">Change Image</p>
-            </div>
-          )}
-        </div>
+        {isEditing ? (
+          <div className="relative w-full h-80 mt-10 rounded-lg overflow-hidden group">
+            <label
+              htmlFor="imageUpload"
+              className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-white text-xl font-semibold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+            >
+              Change image
+            </label>
+            <img
+              className="w-full h-80 object-cover rounded-lg filter group-hover:blur-xs transition"
+              src={formData.image}
+              alt={`Image of ${formData.title}`}
+            />
+            <input
+              type="file"
+              id="imageUpload"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  const imageUrl = URL.createObjectURL(file)
+                  setFormData({ ...formData, image: imageUrl })
+                }
+              }}
+            />
+          </div>
+        ) : (
+          <div className="w-full h-80 mt-10 rounded-lg overflow-hidden">
+            <img
+              className="w-full h-80 object-cover rounded-lg"
+              src={data.image}
+              alt={`Image of ${data.title}`}
+            />
+          </div>
+        )}
         {isEditing ? (
           <div>
             <p className="text-white text-end pb-1">
               {formData.description.length} / 360
             </p>
-
             <textarea
               value={formData.description}
               onChange={(e) =>
@@ -166,6 +189,15 @@ function RouteComponent() {
                 id="sourceCodeLink"
               />
             </div>
+            <CustomButton
+              label="Save changes"
+              variant="primary"
+              onClick={() => {
+                setIsEditing(false)
+                handelResetFormData()
+              }}
+              className=" mb-4"
+            />
           </div>
         ) : (
           <div className="text-white font-bold flex gap-6">
