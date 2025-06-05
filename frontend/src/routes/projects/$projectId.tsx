@@ -5,6 +5,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
 import { useState } from 'react'
+import FileUpload from '@/components/FileUpload'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -21,6 +22,7 @@ export const Route = createFileRoute('/projects/$projectId')({
 function RouteComponent() {
   const { user } = useAuth()
   const { projectId } = Route.useParams()
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const { data } = useSuspenseQuery({
     queryKey: ['project', projectId],
@@ -46,6 +48,7 @@ function RouteComponent() {
       liveDemo: data.liveDemo,
       githubLink: data.githubLink,
     })
+    setSelectedFile(null)
   }
 
   return (
@@ -96,22 +99,22 @@ function RouteComponent() {
             >
               Change image
             </label>
+            {selectedFile && (
+              <div className="absolute top-2 left-2 z-20 bg-black/70 p-2 rounded text-sm text-white">
+                <p>File name: {selectedFile.name}</p>
+                <p>File type: {selectedFile.type}</p>
+                <p>File size: {(selectedFile.size / 1024).toFixed(2)} KB</p>
+              </div>
+            )}
             <img
               className="w-full h-80 object-cover rounded-lg filter group-hover:blur-xs transition"
               src={formData.image}
               alt={`Image of ${formData.title}`}
             />
-            <input
-              type="file"
-              id="imageUpload"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (file) {
-                  const imageUrl = URL.createObjectURL(file)
-                  setFormData({ ...formData, image: imageUrl })
-                }
+            <FileUpload
+              onFileSelect={(file, previewUrl) => {
+                setFormData({ ...formData, image: previewUrl })
+                setSelectedFile(file)
               }}
             />
           </div>
