@@ -1,14 +1,11 @@
 import { useState, type ChangeEvent } from 'react'
 
-type UploadStatus = 'idle' | 'uploading' | 'success' | 'error'
-
 type FileUploadProps = {
   onFileSelect: (file: File, previewUrl: string) => void
 }
 
 export default function FileUpload({ onFileSelect }: FileUploadProps) {
   const [file, setFile] = useState<File | null>(null)
-  const [status, setStatus] = useState<UploadStatus>('idle')
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
