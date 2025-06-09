@@ -1,5 +1,9 @@
-import { fetchProject } from '@/api-routes/projects'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { fetchProject, updateProject } from '@/api-routes/projects'
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
@@ -32,25 +36,50 @@ function RouteComponent() {
   })
 
   const [isEditing, setIsEditing] = useState(false)
-  const [formData, setFormData] = useState({
-    title: data.title,
-    description: data.description,
-    image: data.image,
-    techStack: data.techStack || [],
-    liveDemo: data.liveDemo,
-    githubLink: data.githubLink,
+  const [title, setTitle] = useState(data.title)
+  const [description, setDescription] = useState(data.description)
+  const [githubLink, setGithubLink] = useState(data.githubLink)
+  const [liveDemo, setLiveDemo] = useState(data.liveDemo)
+
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: (formData: FormData) => updateProject(projectId, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+      setIsEditing(false)
+      console.log('Project updated successfully')
+    },
   })
 
-  const handelResetFormData = () => {
-    setFormData({
-      title: data.title,
-      description: data.description,
-      image: data.image,
-      techStack: data.techStack || [],
-      liveDemo: data.liveDemo,
-      githubLink: data.githubLink,
-    })
+  const handleEditSubmit = () => {
+    if (!title || !description) {
+      alert('Title and description are required.')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('githubLink', githubLink || '')
+    formData.append('liveDemo', liveDemo || '')
+
+    if (selectedFile) {
+      formData.append('image', selectedFile)
+    } else if (data.image) {
+      formData.append('existingImage', data.image)
+    }
+
+    mutation.mutate(formData)
+  }
+
+  const handleResetForm = () => {
+    setTitle(data.title)
+    setDescription(data.description)
+    setGithubLink(data.githubLink)
+    setLiveDemo(data.liveDemo)
     setSelectedFile(null)
+    setIsEditing(false)
   }
 
   return (
@@ -60,12 +89,9 @@ function RouteComponent() {
           <input
             className="text-5xl text-white font-medium border border-gray-600 rounded-lg pl-2"
             type="text"
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
             placeholder="Title"
-            size={formData.title.length || 4}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         ) : (
           <h1 className="text-5xl text-white font-medium">{data.title}</h1>
@@ -82,8 +108,7 @@ function RouteComponent() {
                 label="Exit edit mode"
                 variant="secondary"
                 onClick={() => {
-                  setIsEditing(false)
-                  handelResetFormData()
+                  handleResetForm()
                 }}
               />
             ) : (
@@ -106,20 +131,23 @@ function RouteComponent() {
               Change image
             </label>
             {selectedFile && (
-              <div className="absolute top-2 left-2 z-20 bg-black/70 p-2 rounded text-sm text-white">
-                <p>File name: {selectedFile.name}</p>
-                <p>File type: {selectedFile.type}</p>
-                <p>File size: {(selectedFile.size / 1024).toFixed(2)} KB</p>
-              </div>
+              <>
+                <div className="absolute top-2 left-2 z-20 bg-black/70 p-2 rounded text-sm text-white">
+                  <p>File name: {selectedFile.name}</p>
+                  <p>File type: {selectedFile.type}</p>
+                  <p>File size: {(selectedFile.size / 1024).toFixed(2)} KB</p>
+                </div>
+              </>
             )}
             <img
+              src={
+                selectedFile ? URL.createObjectURL(selectedFile) : data.image
+              }
               className="w-full h-80 object-cover rounded-lg filter group-hover:blur-xs transition"
-              src={formData.image}
-              alt={`Image of ${formData.title}`}
+              alt="Project image"
             />
             <FileUpload
-              onFileSelect={(file, previewUrl) => {
-                setFormData({ ...formData, image: previewUrl })
+              onFileSelect={(file) => {
                 setSelectedFile(file)
               }}
             />
@@ -135,18 +163,14 @@ function RouteComponent() {
         )}
         {isEditing ? (
           <div>
-            <p className="text-white text-end pb-1">
-              {formData.description.length} / 360
-            </p>
+            <p className="text-white text-end pb-1"></p>
             <textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
               placeholder="Add a description"
               className="text-white bg-transparent border border-gray-600 p-4 rounded-lg w-full"
               rows={4}
               maxLength={360}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
         ) : (
@@ -173,12 +197,10 @@ function RouteComponent() {
                 Link to live project:
               </label>
               <input
+                value={liveDemo}
+                onChange={(e) => setLiveDemo(e.target.value)}
                 className="text-white bg-transparent border border-gray-600 p-2 rounded-lg"
                 type="text"
-                value={formData.liveDemo}
-                onChange={(e) =>
-                  setFormData({ ...formData, liveDemo: e.target.value })
-                }
                 placeholder="Live demo link"
                 id="liveDemoLink"
               />
@@ -188,24 +210,20 @@ function RouteComponent() {
                 Link to source code:
               </label>
               <input
+                value={githubLink}
+                onChange={(e) => setGithubLink(e.target.value)}
                 className="text-white bg-transparent border border-gray-600 p-2 rounded-lg"
                 type="text"
-                value={formData.githubLink}
-                onChange={(e) =>
-                  setFormData({ ...formData, githubLink: e.target.value })
-                }
                 placeholder="GitHub source code link"
                 id="sourceCodeLink"
               />
             </div>
             <CustomButton
-              label="Save changes"
+              label={mutation.isPending ? 'Saving...' : 'Save changes'}
+              disabled={mutation.isPending}
               variant="primary"
-              onClick={() => {
-                setIsEditing(false)
-                handelResetFormData()
-              }}
               className=" mb-4"
+              onClick={handleEditSubmit}
             />
           </div>
         ) : (
