@@ -35,6 +35,22 @@ export const createProject = async (projectData: FormData) => {
   return data as Project
 }
 
+export const updateProject = async (
+  projectId: string,
+  projectData: FormData,
+) => {
+  const { data } = await axios.put(
+    `https://portfolio-backend-mu-seven.vercel.app/api/projects/${projectId}`,
+    projectData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  )
+  return data as Project
+}
+
 export const deleteProject = async (projectId: string) => {
   const { data } = await axios.delete(
     `https://portfolio-backend-mu-seven.vercel.app/api/projects/${projectId}`,
