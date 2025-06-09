@@ -50,12 +50,14 @@ export function AddProjectModal({ onClose }: Props) {
           <input
             type="text"
             placeholder="Title"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
 
           <textarea
             placeholder="Description"
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
@@ -100,6 +102,8 @@ export function AddProjectModal({ onClose }: Props) {
             <div className="flex gap-2">
               <input
                 type="text"
+                placeholder="Add your tech stack"
+                value={techInput}
                 onChange={(e) => setTechInput(e.target.value)}
                 className="flex-1 border px-3 py-2 rounded"
               />
@@ -125,6 +129,7 @@ export function AddProjectModal({ onClose }: Props) {
           <input
             type="url"
             placeholder="GitHub Link"
+            value={githubLink}
             onChange={(e) => setGithubLink(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
@@ -132,6 +137,7 @@ export function AddProjectModal({ onClose }: Props) {
           <input
             type="url"
             placeholder="Live Link"
+            value={liveLink}
             onChange={(e) => setLiveLink(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
