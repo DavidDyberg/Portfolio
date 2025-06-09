@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
 import { useState } from 'react'
 import FileUpload from '@/components/FileUpload'
+import { DeleteProjectModal } from '@/components/DeleteProjectModal'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -23,6 +24,7 @@ function RouteComponent() {
   const { user } = useAuth()
   const { projectId } = Route.useParams()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   const { data } = useSuspenseQuery({
     queryKey: ['project', projectId],
@@ -85,7 +87,11 @@ function RouteComponent() {
                 }}
               />
             ) : (
-              <CustomButton label="Delete project" variant="secondary" />
+              <CustomButton
+                label="Delete project"
+                variant="secondary"
+                onClick={() => setDeleteModalOpen(true)}
+              />
             )}
           </div>
         )}
@@ -225,6 +231,13 @@ function RouteComponent() {
               </a>
             </div>
           </div>
+        )}
+
+        {deleteModalOpen && (
+          <DeleteProjectModal
+            onClose={() => setDeleteModalOpen(false)}
+            projectId={data._id}
+          />
         )}
       </div>
     </section>
