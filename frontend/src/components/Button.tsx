@@ -5,17 +5,20 @@ type ButtonProps = {
   variant: 'primary' | 'secondary'
   onClick?: () => void
   className?: string
+  disabled?: boolean
 }
 
 export const CustomButton: React.FC<ButtonProps> = ({
   label,
   variant,
   onClick,
+  disabled = false,
   className,
 }) => {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={cn(
         'p-3 rounded-full cursor-pointer',
         variant === 'primary'

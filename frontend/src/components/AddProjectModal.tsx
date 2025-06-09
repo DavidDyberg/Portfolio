@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { CustomButton } from './Button'
 import { X } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createProject } from '@/api-routes/projects'
 
 type Props = {
   onClose: () => void
@@ -35,6 +37,36 @@ export function AddProjectModal({ onClose }: Props) {
     }
   }
 
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: createProject,
+    onSuccess: () => {
+      onClose()
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+    },
+  })
+
+  const handleSubmit = () => {
+    if (!title || !description || !imageFile) {
+      alert('Please fill in title, description and image')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('githubLink', githubLink)
+    formData.append('liveLink', liveLink)
+    techStack.forEach((tech) => formData.append('techStack', tech))
+
+    if (imageFile) {
+      formData.append('image', imageFile)
+    }
+
+    mutation.mutate(formData)
+  }
+
   return (
     <div
       onClick={handleOutsideClick}
@@ -47,7 +79,9 @@ export function AddProjectModal({ onClose }: Props) {
         </div>
 
         <div className="space-y-3">
+          {}
           <input
+            required
             type="text"
             placeholder="Title"
             value={title}
@@ -56,6 +90,7 @@ export function AddProjectModal({ onClose }: Props) {
           />
 
           <textarea
+            required
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -71,6 +106,7 @@ export function AddProjectModal({ onClose }: Props) {
             </label>
             <div className="relative">
               <input
+                required
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImageFile(e.target.files?.[0] || null)}
@@ -150,8 +186,10 @@ export function AddProjectModal({ onClose }: Props) {
               className="rounded-3xl"
             />
             <CustomButton
-              label="Submit"
+              label={mutation.isPending ? 'Submitting...' : 'Submit'}
+              disabled={mutation.isPending}
               variant="primary"
+              onClick={handleSubmit}
               className="rounded-3xl"
             />
           </div>
