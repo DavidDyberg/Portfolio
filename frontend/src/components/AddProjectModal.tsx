@@ -44,17 +44,22 @@ export function AddProjectModal({ onClose }: Props) {
     onSuccess: () => {
       onClose()
       queryClient.invalidateQueries({ queryKey: ['projects'] })
-      console.log('Project created successfully')
     },
   })
 
   const handleSubmit = () => {
+    if (!title || !description || !imageFile) {
+      alert('Please fill in title, description and image')
+      return
+    }
+
     const formData = new FormData()
     formData.append('title', title)
     formData.append('description', description)
     formData.append('githubLink', githubLink)
     formData.append('liveLink', liveLink)
-    formData.append('techStack', JSON.stringify(techStack))
+    techStack.forEach((tech) => formData.append('techStack', tech))
+
     if (imageFile) {
       formData.append('image', imageFile)
     }
@@ -74,7 +79,9 @@ export function AddProjectModal({ onClose }: Props) {
         </div>
 
         <div className="space-y-3">
+          {}
           <input
+            required
             type="text"
             placeholder="Title"
             value={title}
@@ -83,6 +90,7 @@ export function AddProjectModal({ onClose }: Props) {
           />
 
           <textarea
+            required
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -98,6 +106,7 @@ export function AddProjectModal({ onClose }: Props) {
             </label>
             <div className="relative">
               <input
+                required
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImageFile(e.target.files?.[0] || null)}
@@ -178,6 +187,7 @@ export function AddProjectModal({ onClose }: Props) {
             />
             <CustomButton
               label={mutation.isPending ? 'Submitting...' : 'Submit'}
+              disabled={mutation.isPending}
               variant="primary"
               onClick={handleSubmit}
               className="rounded-3xl"
