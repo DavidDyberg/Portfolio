@@ -1,7 +1,11 @@
 import { fetchAllProjects } from '@/api-routes/projects'
+import { AddProjectModal } from '@/components/AddProjectModal'
+import { CustomButton } from '@/components/Button'
 import { ProjectCard } from '@/components/ProjectCard'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
 
 export const Route = createFileRoute('/projects/')({
   component: RouteComponent,
@@ -16,6 +20,9 @@ export const Route = createFileRoute('/projects/')({
 })
 
 function RouteComponent() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { user } = useAuth()
+
   const projectsQuery = useSuspenseQuery({
     queryKey: ['projects'],
     queryFn: fetchAllProjects,
@@ -23,8 +30,17 @@ function RouteComponent() {
 
   return (
     <div className="mt-20">
-      <h1 className="text-5xl text-white font-medium">All projects</h1>
-      <div className="mt-10 grid grid-cols-1 place-items-center sm:grid-cols-2  gap-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-5xl text-white font-medium">All projects</h1>
+        {user && (
+          <CustomButton
+            label="Add new project"
+            variant="primary"
+            onClick={() => setIsModalOpen(true)}
+          />
+        )}
+      </div>
+      <div className="mt-10 grid grid-cols-1 place-items-center sm:grid-cols-2 gap-8">
         {projectsQuery.data.map((project) => (
           <ProjectCard
             key={project._id}
@@ -41,6 +57,7 @@ function RouteComponent() {
         ))}
       </div>
       )
+      {isModalOpen && <AddProjectModal onClose={() => setIsModalOpen(false)} />}
     </div>
   )
 }
