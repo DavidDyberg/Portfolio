@@ -19,8 +19,8 @@ export const CustomButton: React.FC<ButtonProps> = ({
       className={cn(
         'p-3 rounded-full cursor-pointer',
         variant === 'primary'
-          ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-          : 'border-2 border-red-600 text-red-600 hover:border-red-500 hover:text-red-500 ',
+          ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+          : 'border-2 border-red-500 text-red-500 hover:border-red-700 hover:text-red-700 ',
         className,
       )}
     >
