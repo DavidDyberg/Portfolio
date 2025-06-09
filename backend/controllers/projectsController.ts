@@ -36,7 +36,17 @@ export const getProjectById = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const { title, description, techStack, githubLink, liveDemo } = req.body;
+    const { title, description, githubLink, liveDemo } = req.body;
+
+    let techStack = req.body.techStack;
+
+    if (typeof techStack === "string") {
+      if (techStack.includes(",")) {
+        techStack = techStack.split(",").map((tech: string) => tech.trim());
+      } else {
+        techStack = [techStack];
+      }
+    }
 
     const imageUrl = req.file ? req.file.path : "";
 
@@ -48,6 +58,7 @@ export const createProject = async (req: Request, res: Response) => {
       liveDemo,
       image: imageUrl,
     });
+
     res
       .status(201)
       .json({ message: "New project created successfully", project });
