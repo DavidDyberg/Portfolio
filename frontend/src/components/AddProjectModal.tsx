@@ -12,7 +12,7 @@ export function AddProjectModal({ onClose }: Props) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [githubLink, setGithubLink] = useState('')
-  const [liveLink, setLiveLink] = useState('')
+  const [liveDemo, setLiveDemo] = useState('')
   const [techInput, setTechInput] = useState('')
   const [techStack, setTechStack] = useState<string[]>([])
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -57,7 +57,7 @@ export function AddProjectModal({ onClose }: Props) {
     formData.append('title', title)
     formData.append('description', description)
     formData.append('githubLink', githubLink)
-    formData.append('liveLink', liveLink)
+    formData.append('liveDemo', liveDemo)
     techStack.forEach((tech) => formData.append('techStack', tech))
 
     if (imageFile) {
@@ -79,7 +79,6 @@ export function AddProjectModal({ onClose }: Props) {
         </div>
 
         <div className="space-y-3">
-          {}
           <input
             required
             type="text"
@@ -173,8 +172,8 @@ export function AddProjectModal({ onClose }: Props) {
           <input
             type="url"
             placeholder="Live Link"
-            value={liveLink}
-            onChange={(e) => setLiveLink(e.target.value)}
+            value={liveDemo}
+            onChange={(e) => setLiveDemo(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
 

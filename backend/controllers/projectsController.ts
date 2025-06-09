@@ -10,7 +10,10 @@ export const getAllProjects = async (req: Request, res: Response) => {
       query = { title: { $regex: search, $options: "i" } };
     }
 
-    const projects = await Project.find(query).limit(Number(limit) || 0);
+    const projects = await Project.find(query)
+      .limit(Number(limit) || 0)
+      .find()
+      .sort({ createdAt: -1 });
     res.json(projects);
   } catch (error) {
     if (error instanceof Error) {
