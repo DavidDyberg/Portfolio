@@ -48,7 +48,6 @@ function RouteComponent() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
       setIsEditing(false)
-      console.log('Project updated successfully')
     },
   })
 
@@ -69,7 +68,6 @@ function RouteComponent() {
     } else if (data.image) {
       formData.append('existingImage', data.image)
     }
-
     mutation.mutate(formData)
   }
 
