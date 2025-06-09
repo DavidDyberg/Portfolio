@@ -77,16 +77,20 @@ export const createProject = async (req: Request, res: Response) => {
 export const updateProject = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const imageUrl = req.file ? req.file.path : "";
+    const imageUrl = req.file ? req.file.path : req.body.existingImage;
 
-    const project = await Project.findByIdAndUpdate(id, {
-      title: req.body.title,
-      description: req.body.description,
-      techStack: req.body.techStack,
-      githubLink: req.body.githubLink,
-      liveDemo: req.body.liveDemo,
-      image: imageUrl,
-    });
+    const project = await Project.findByIdAndUpdate(
+      id,
+      {
+        title: req.body.title,
+        description: req.body.description,
+        techStack: req.body.techStack,
+        githubLink: req.body.githubLink,
+        liveDemo: req.body.liveDemo,
+        image: imageUrl,
+      },
+      { new: true }
+    );
 
     if (!project) {
       res.status(404).json({ message: "Project not found" });
