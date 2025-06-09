@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { CustomButton } from './Button'
 import { X } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createProject } from '@/api-routes/projects'
 
 type Props = {
   onClose: () => void
@@ -33,6 +35,31 @@ export function AddProjectModal({ onClose }: Props) {
     if (e.target === e.currentTarget) {
       onClose()
     }
+  }
+
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: createProject,
+    onSuccess: () => {
+      onClose()
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      console.log('Project created successfully')
+    },
+  })
+
+  const handleSubmit = () => {
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('githubLink', githubLink)
+    formData.append('liveLink', liveLink)
+    formData.append('techStack', JSON.stringify(techStack))
+    if (imageFile) {
+      formData.append('image', imageFile)
+    }
+
+    mutation.mutate(formData)
   }
 
   return (
@@ -150,8 +177,9 @@ export function AddProjectModal({ onClose }: Props) {
               className="rounded-3xl"
             />
             <CustomButton
-              label="Submit"
+              label={mutation.isPending ? 'Submitting...' : 'Submit'}
               variant="primary"
+              onClick={handleSubmit}
               className="rounded-3xl"
             />
           </div>
