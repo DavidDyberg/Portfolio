@@ -24,6 +24,9 @@ export default function Header() {
             <Link to="/login">Login</Link>
           </div>
         )}
+        <div className="px-2">
+          <Link to="/pokemon">Pokemon game</Link>
+        </div>
       </nav>
     </header>
   )
