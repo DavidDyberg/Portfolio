@@ -162,12 +162,13 @@ function RouteComponent() {
             </div>
           )}
           {isEditing ? (
-            <div className="w-full lg:pt-10">
+            <div className="w-full lg:pt-4">
+              <p className="text-white text-end">{description.length} / 500</p>
               <textarea
                 placeholder="Add a description"
                 className="text-white bg-transparent border border-gray-600 p-4 rounded-lg w-full"
                 rows={10}
-                maxLength={360}
+                maxLength={500}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
