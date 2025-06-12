@@ -54,21 +54,22 @@ function App() {
         </div>
       </section>
 
-      {pinnedProjectsQuery.data && (
-        <section>
-          <h2 className="text-white text-4xl">Pinned projects</h2>
-          <div className="flex items-center justify-between">
-            {pinnedProjectsQuery.data.map((project) => (
-              <ProjectCard
-                key={project._id}
-                title={project.title}
-                image={project.image}
-                link={{ to: '/projects' }}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      <section className="pt-10">
+        <h2 className="text-white text-4xl">Pinned projects</h2>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {pinnedProjectsQuery.data.map((project) => (
+            <ProjectCard
+              key={project._id}
+              title={project.title}
+              image={project.image}
+              link={{
+                to: '/projects/$projectId',
+                params: { projectId: project._id },
+              }}
+            />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
