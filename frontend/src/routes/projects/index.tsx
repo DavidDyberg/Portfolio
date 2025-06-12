@@ -30,8 +30,8 @@ function RouteComponent() {
 
   return (
     <div className="mt-20">
-      <div className="flex items-center justify-between">
-        <h1 className="text-5xl text-white font-medium">All projects</h1>
+      <div className="sm:flex sm:flex-row sm:justify-between flex flex-col gap-4">
+        <h1 className="text-5xl text-white font-medium">My work</h1>
         {user && (
           <CustomButton
             label="Add new project"
@@ -40,7 +40,7 @@ function RouteComponent() {
           />
         )}
       </div>
-      <div className="mt-10 grid grid-cols-1 place-items-center sm:grid-cols-2 gap-8">
+      <div className="mt-10 grid grid-cols-1  sm:grid-cols-2 gap-8">
         {projectsQuery.data.map((project) => (
           <ProjectCard
             key={project._id}
@@ -56,7 +56,6 @@ function RouteComponent() {
           />
         ))}
       </div>
-      )
       {isModalOpen && <AddProjectModal onClose={() => setIsModalOpen(false)} />}
     </div>
   )
