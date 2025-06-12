@@ -82,7 +82,7 @@ function RouteComponent() {
 
   return (
     <section className="mt-20">
-      <div className="flex items-center justify-between">
+      <div className="sm:flex sm:flex-row sm:items-center sm:justify-between flex flex-col-reverse gap-4">
         {isEditing ? (
           <input
             className="text-5xl text-white font-medium border border-gray-600 rounded-lg pl-2"
@@ -119,64 +119,67 @@ function RouteComponent() {
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-6">
-        {isEditing ? (
-          <div className="relative w-full h-80 mt-10 rounded-lg overflow-hidden group">
-            <label
-              htmlFor="imageUpload"
-              className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-white text-xl font-semibold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-            >
-              Change image
-            </label>
-            {selectedFile && (
-              <>
-                <div className="absolute top-2 left-2 z-20 bg-black/70 p-2 rounded text-sm text-white">
-                  <p>File name: {selectedFile.name}</p>
-                  <p>File type: {selectedFile.type}</p>
-                  <p>File size: {(selectedFile.size / 1024).toFixed(2)} KB</p>
-                </div>
-              </>
-            )}
-            <img
-              src={
-                selectedFile ? URL.createObjectURL(selectedFile) : data.image
-              }
-              className="w-full h-80 object-cover rounded-lg filter group-hover:blur-xs transition"
-              alt="Project image"
-            />
-            <FileUpload
-              onFileSelect={(file) => {
-                setSelectedFile(file)
-              }}
-            />
-          </div>
-        ) : (
-          <div className="w-full h-80 mt-10 rounded-lg overflow-hidden">
-            <img
-              className="w-full h-80 object-cover rounded-lg"
-              src={data.image}
-              alt={`Image of ${data.title}`}
-            />
-          </div>
-        )}
-        {isEditing ? (
-          <div>
-            <p className="text-white text-end pb-1"></p>
-            <textarea
-              placeholder="Add a description"
-              className="text-white bg-transparent border border-gray-600 p-4 rounded-lg w-full"
-              rows={4}
-              maxLength={360}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-        ) : (
-          <p className="text-white">{data.description}</p>
-        )}
+      <div className="flex flex-col gap-6 sm:pt-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {isEditing ? (
+            <div className="relative flex-shrink-0 w-full max-w-lg aspect-w-16 aspect-h-9 mt-10 rounded-lg overflow-hidden group bg-gray-900 flex items-center justify-center">
+              <label
+                htmlFor="imageUpload"
+                className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-white text-xl font-semibold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              >
+                Change image
+              </label>
+              {selectedFile && (
+                <>
+                  <div className="absolute top-2 left-2 z-20 bg-black/70 p-2 rounded text-sm text-white">
+                    <p>File name: {selectedFile.name}</p>
+                    <p>File type: {selectedFile.type}</p>
+                    <p>File size: {(selectedFile.size / 1024).toFixed(2)} KB</p>
+                  </div>
+                </>
+              )}
 
+              <img
+                src={
+                  selectedFile ? URL.createObjectURL(selectedFile) : data.image
+                }
+                className="w-full h-full object-contain rounded-lg filter group-hover:blur-xs transition"
+                alt="Project image"
+              />
+              <FileUpload
+                onFileSelect={(file) => {
+                  setSelectedFile(file)
+                }}
+              />
+            </div>
+          ) : (
+            <div className="flex-shrink-0 w-full sm:max-w-lg aspect-w-16 aspect-h-9 mt-10 rounded-lg overflow-hidden bg-gray-900 flex items-center justify-center">
+              <img
+                className="w-full h-full object-contain"
+                src={data.image}
+                alt={`Image of ${data.title}`}
+              />
+            </div>
+          )}
+          {isEditing ? (
+            <div className="w-full lg:pt-10">
+              <textarea
+                placeholder="Add a description"
+                className="text-white bg-transparent border border-gray-600 p-4 rounded-lg w-full"
+                rows={10}
+                maxLength={360}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+          ) : (
+            <p className="text-white lg:pt-10">{data.description}</p>
+          )}
+        </div>
         <div>
-          <h2 className="text-white text-xl">Technologies used:</h2>
+          <h2 className="text-white text-base pb-4">
+            {data.title} was created using:
+          </h2>
           {data.techStack && (
             <ul className="ml-4">
               {data.techStack.map((tech, index) => (
