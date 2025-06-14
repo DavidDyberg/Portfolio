@@ -5,7 +5,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Check } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
 import { useState } from 'react'
@@ -14,6 +14,7 @@ import { DeleteProjectModal } from '@/components/DeleteProjectModal'
 import { useRouter } from '@tanstack/react-router'
 import { GoBackButton } from '@/components/GoBackButton'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import toast from 'react-hot-toast'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -47,11 +48,16 @@ function RouteComponent() {
   const [liveDemo, setLiveDemo] = useState(data.liveDemo)
 
   const queryClient = useQueryClient()
+  const notify = () =>
+    toast('Project updated successfully', {
+      icon: <Check color="lightGreen" />,
+    })
 
   const mutation = useMutation({
     mutationFn: (formData: FormData) => updateProject(projectId, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+      notify()
       setIsEditing(false)
     },
   })
