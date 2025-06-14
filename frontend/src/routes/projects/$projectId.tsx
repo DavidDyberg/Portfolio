@@ -5,7 +5,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { ArrowUpRight, ChevronLeft } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
 import { useState } from 'react'
@@ -13,6 +13,7 @@ import FileUpload from '@/components/FileUpload'
 import { DeleteProjectModal } from '@/components/DeleteProjectModal'
 import { useRouter } from '@tanstack/react-router'
 import { GoBackButton } from '@/components/GoBackButton'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -226,7 +227,15 @@ function RouteComponent() {
               />
             </div>
             <CustomButton
-              label={mutation.isPending ? 'Saving...' : 'Save changes'}
+              label={
+                mutation.isPending ? (
+                  <div className="flex justify-center">
+                    <LoadingSpinner color="white" size="sm" />
+                  </div>
+                ) : (
+                  'Save changes'
+                )
+              }
               disabled={mutation.isPending}
               variant="primary"
               className=" mb-4"
