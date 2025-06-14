@@ -229,7 +229,8 @@ function RouteComponent() {
             <CustomButton
               label={
                 mutation.isPending ? (
-                  <div className="flex justify-center">
+                  <div className="flex justify-center gap-2 items-center">
+                    <p className="">Save changes</p>
                     <LoadingSpinner color="white" size="sm" />
                   </div>
                 ) : (

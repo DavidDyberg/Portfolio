@@ -3,6 +3,7 @@ import { CustomButton } from './Button'
 import { X } from 'lucide-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createProject } from '@/api-routes/projects'
+import LoadingSpinner from './LoadingSpinner'
 
 type Props = {
   onClose: () => void
@@ -185,7 +186,16 @@ export function AddProjectModal({ onClose }: Props) {
               className="rounded-3xl"
             />
             <CustomButton
-              label={mutation.isPending ? 'Submitting...' : 'Submit'}
+              label={
+                mutation.isPending ? (
+                  <div className="flex justify-center gap-2 items-center">
+                    <p className="">Submitting</p>
+                    <LoadingSpinner color="white" size="sm" />
+                  </div>
+                ) : (
+                  'Submit'
+                )
+              }
               disabled={mutation.isPending}
               variant="primary"
               onClick={handleSubmit}
