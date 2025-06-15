@@ -1,7 +1,8 @@
+import type React from 'react'
 import { cn } from '../../utils/classnames.ts'
 
 type ButtonProps = {
-  label: string
+  label: React.ReactNode
   variant: 'primary' | 'secondary'
   onClick?: () => void
   className?: string

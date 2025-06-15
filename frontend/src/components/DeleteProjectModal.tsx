@@ -3,7 +3,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { CustomButton } from './Button'
 import { useNavigate } from '@tanstack/react-router'
-import { X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 type Props = {
   onClose: () => void
@@ -24,6 +25,10 @@ export function DeleteProjectModal({ onClose, projectId }: Props) {
     }
   }
 
+  const successToaster = () =>
+    toast('Project deleted', {
+      icon: <Check color="lightGreen" />,
+    })
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
@@ -32,6 +37,7 @@ export function DeleteProjectModal({ onClose, projectId }: Props) {
     onSuccess: () => {
       onClose()
       queryClient.invalidateQueries({ queryKey: ['projects'] })
+      successToaster()
       navigate({ to: '/projects' })
     },
   })

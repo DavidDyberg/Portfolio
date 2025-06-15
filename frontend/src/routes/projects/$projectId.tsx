@@ -5,12 +5,16 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Check } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
 import { useState } from 'react'
 import FileUpload from '@/components/FileUpload'
 import { DeleteProjectModal } from '@/components/DeleteProjectModal'
+import { useRouter } from '@tanstack/react-router'
+import { GoBackButton } from '@/components/GoBackButton'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import toast from 'react-hot-toast'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -29,6 +33,8 @@ function RouteComponent() {
   const { projectId } = Route.useParams()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const router = useRouter()
+  const goBack = router.history.back
 
   const { data } = useSuspenseQuery({
     queryKey: ['project', projectId],
@@ -42,11 +48,16 @@ function RouteComponent() {
   const [liveDemo, setLiveDemo] = useState(data.liveDemo)
 
   const queryClient = useQueryClient()
+  const successToaster = () =>
+    toast('Project updated successfully', {
+      icon: <Check color="lightGreen" />,
+    })
 
   const mutation = useMutation({
     mutationFn: (formData: FormData) => updateProject(projectId, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+      successToaster()
       setIsEditing(false)
     },
   })
@@ -82,6 +93,7 @@ function RouteComponent() {
 
   return (
     <section className="mt-20">
+      <GoBackButton onClick={goBack} />
       <div className="sm:flex sm:flex-row sm:items-center sm:justify-between flex flex-col-reverse gap-4">
         {isEditing ? (
           <input
@@ -120,7 +132,7 @@ function RouteComponent() {
         )}
       </div>
       <div className="flex flex-col gap-6 sm:pt-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-[40%_60%] gap-8">
           {isEditing ? (
             <div className="relative flex-shrink-0 w-full max-w-lg aspect-w-16 aspect-h-9 mt-10 rounded-lg overflow-hidden group bg-gray-900 flex items-center justify-center">
               <label
@@ -179,7 +191,7 @@ function RouteComponent() {
         </div>
         <div>
           <h2 className="text-white text-base pb-4">
-            {data.title} was created using:
+            <span className="font-bold">{data.title}</span> was created using:
           </h2>
           {data.techStack && (
             <ul className="ml-4">
@@ -221,7 +233,16 @@ function RouteComponent() {
               />
             </div>
             <CustomButton
-              label={mutation.isPending ? 'Saving...' : 'Save changes'}
+              label={
+                mutation.isPending ? (
+                  <div className="flex justify-center gap-2 items-center">
+                    <p className="">Save changes</p>
+                    <LoadingSpinner color="white" size="sm" />
+                  </div>
+                ) : (
+                  'Save changes'
+                )
+              }
               disabled={mutation.isPending}
               variant="primary"
               className=" mb-4"
