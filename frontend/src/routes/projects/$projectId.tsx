@@ -48,7 +48,7 @@ function RouteComponent() {
   const [liveDemo, setLiveDemo] = useState(data.liveDemo)
 
   const queryClient = useQueryClient()
-  const notify = () =>
+  const successToaster = () =>
     toast('Project updated successfully', {
       icon: <Check color="lightGreen" />,
     })
@@ -57,7 +57,7 @@ function RouteComponent() {
     mutationFn: (formData: FormData) => updateProject(projectId, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
-      notify()
+      successToaster()
       setIsEditing(false)
     },
   })
