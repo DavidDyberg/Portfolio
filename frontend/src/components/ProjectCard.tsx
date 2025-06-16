@@ -5,7 +5,7 @@ import { cn } from '../../utils/classnames.ts'
 type ProjectCardProps = {
   title: string
   image?: string
-  link: LinkProps['to']
+  link: LinkProps
   className?: string
 }
 
@@ -16,19 +16,21 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   className,
 }) => {
   return (
-    <Link to={link}>
-      <div className="flex flex-col gap-4">
-        <h2 className={cn('text-white text-2xl font-semibold', className)}>
+    <Link {...link}>
+      <div className="flex flex-col gap-2">
+        <h2 className={cn('text-white text-4xl font-semibold', className)}>
           {title}
         </h2>
-        <img
-          className={cn(
-            'w-xs h-64 rounded-2xl object-cover hover:scale-102 transition-transform duration-300',
-            className,
-          )}
-          src={image}
-          alt="Project image"
-        />
+        <div className="aspect-w-16 aspect-h-9 w-full rounded-2xl overflow-hidden">
+          <img
+            className={cn(
+              'rounded-2xl object-contain hover:scale-102 transition-transform duration-300 w-full h-full',
+              className,
+            )}
+            src={image}
+            alt={`Image of the project ${title}`}
+          />
+        </div>
       </div>
     </Link>
   )

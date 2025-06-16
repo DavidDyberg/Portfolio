@@ -10,7 +10,10 @@ export const getAllProjects = async (req: Request, res: Response) => {
       query = { title: { $regex: search, $options: "i" } };
     }
 
-    const projects = await Project.find(query).limit(Number(limit) || 0);
+    const projects = await Project.find(query)
+      .limit(Number(limit) || 0)
+      .find()
+      .sort({ createdAt: -1 });
     res.json(projects);
   } catch (error) {
     if (error instanceof Error) {
@@ -36,7 +39,17 @@ export const getProjectById = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const { title, description, techStack, githubLink, liveDemo } = req.body;
+    const { title, description, githubLink, liveDemo } = req.body;
+
+    let techStack = req.body.techStack;
+
+    if (typeof techStack === "string") {
+      if (techStack.includes(",")) {
+        techStack = techStack.split(",").map((tech: string) => tech.trim());
+      } else {
+        techStack = [techStack];
+      }
+    }
 
     const imageUrl = req.file ? req.file.path : "";
 
@@ -48,6 +61,7 @@ export const createProject = async (req: Request, res: Response) => {
       liveDemo,
       image: imageUrl,
     });
+
     res
       .status(201)
       .json({ message: "New project created successfully", project });
@@ -63,16 +77,20 @@ export const createProject = async (req: Request, res: Response) => {
 export const updateProject = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const imageUrl = req.file ? req.file.path : "";
+    const imageUrl = req.file ? req.file.path : req.body.existingImage;
 
-    const project = await Project.findByIdAndUpdate(id, {
-      title: req.body.title,
-      description: req.body.description,
-      techStack: req.body.techStack,
-      githubLink: req.body.githubLink,
-      liveDemo: req.body.liveDemo,
-      image: imageUrl,
-    });
+    const project = await Project.findByIdAndUpdate(
+      id,
+      {
+        title: req.body.title,
+        description: req.body.description,
+        techStack: req.body.techStack,
+        githubLink: req.body.githubLink,
+        liveDemo: req.body.liveDemo,
+        image: imageUrl,
+      },
+      { new: true }
+    );
 
     if (!project) {
       res.status(404).json({ message: "Project not found" });

@@ -36,7 +36,7 @@ function App() {
 
   return (
     <div className="mt-20">
-      <section className="flex items-center justify-between relative h-screen">
+      <section className="sm:flex sm:flex-row sm:justify-between flex flex-col items-center gap-4">
         <div className="flex flex-col gap-4">
           <h1 className="text-5xl text-white font-medium">
             {aboutQuery.data.firstName} {aboutQuery.data.lastName}
@@ -51,21 +51,22 @@ function App() {
         </div>
       </section>
 
-      {pinnedProjectsQuery.data && (
-        <section>
-          <h2 className="text-white text-4xl">Pinned projects</h2>
-          <div className="flex items-center justify-between">
-            {pinnedProjectsQuery.data.map((project) => (
-              <ProjectCard
-                key={project._id}
-                title={project.title}
-                image={project.image}
-                link={'/projects'}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      <section className="pt-10">
+        <h2 className="text-white text-4xl">Pinned projects</h2>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {pinnedProjectsQuery.data.map((project) => (
+            <ProjectCard
+              key={project._id}
+              title={project.title}
+              image={project.image}
+              link={{
+                to: '/projects/$projectId',
+                params: { projectId: project._id },
+              }}
+            />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

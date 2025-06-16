@@ -9,6 +9,9 @@ import { routeTree } from './routeTree.gen.ts'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import { AuthProvider } from './context/AuthContext.tsx'
+import { Toaster } from 'react-hot-toast'
 
 // Create a new router instance
 const router = createRouter({
@@ -35,9 +38,14 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <TanStackQueryProvider.Provider>
-        <RouterProvider router={router} />
-      </TanStackQueryProvider.Provider>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <AuthProvider>
+          <TanStackQueryProvider.Provider>
+            <Toaster />
+            <RouterProvider router={router} />
+          </TanStackQueryProvider.Provider>
+        </AuthProvider>
+      </GoogleOAuthProvider>
     </StrictMode>,
   )
 }
