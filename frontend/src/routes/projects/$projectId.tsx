@@ -94,7 +94,7 @@ function RouteComponent() {
   return (
     <section className="mt-20">
       <GoBackButton onClick={goBack} />
-      <div className="sm:flex sm:flex-row sm:items-center sm:justify-between flex flex-col-reverse gap-4">
+      <div className="md:flex md:flex-row md:items-center md:justify-between flex flex-col-reverse gap-4">
         {isEditing ? (
           <input
             className="text-5xl text-white font-medium border border-gray-600 rounded-lg pl-2"
@@ -131,7 +131,7 @@ function RouteComponent() {
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-6 sm:pt-8">
+      <div className="flex flex-col gap-6 md:pt-8">
         <div className="flex flex-col lg:grid lg:grid-cols-[40%_60%] gap-8">
           {isEditing ? (
             <div className="relative flex-shrink-0 w-full max-w-lg aspect-w-16 aspect-h-9 mt-10 rounded-lg overflow-hidden group bg-gray-900 flex items-center justify-center">
@@ -165,7 +165,7 @@ function RouteComponent() {
               />
             </div>
           ) : (
-            <div className="flex-shrink-0 w-full sm:max-w-lg aspect-w-16 aspect-h-9 mt-10 rounded-lg overflow-hidden bg-gray-900 flex items-center justify-center">
+            <div className="flex-shrink-0 w-full md:max-w-lg aspect-w-16 aspect-h-9 mt-10 rounded-lg overflow-hidden bg-gray-900 flex items-center justify-center">
               <img
                 className="w-full h-full object-contain"
                 src={data.image}
