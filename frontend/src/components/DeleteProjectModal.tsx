@@ -5,6 +5,7 @@ import { CustomButton } from './Button'
 import { useNavigate } from '@tanstack/react-router'
 import { Check, X } from 'lucide-react'
 import toast from 'react-hot-toast'
+import LoadingSpinner from './LoadingSpinner'
 
 type Props = {
   onClose: () => void
@@ -60,7 +61,16 @@ export function DeleteProjectModal({ onClose, projectId }: Props) {
         <div className="flex justify-end space-x-2">
           <CustomButton label="Cancel" variant="primary" onClick={onClose} />
           <CustomButton
-            label="Delete"
+            label={
+              mutation.isPending ? (
+                <div className="flex items-center gap-2">
+                  <p>Deleting</p>
+                  <LoadingSpinner size="sm" color="border-red-500" />
+                </div>
+              ) : (
+                'Delete'
+              )
+            }
             variant="secondary"
             onClick={handleDelete}
           />
