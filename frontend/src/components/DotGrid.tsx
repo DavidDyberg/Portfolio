@@ -1,11 +1,11 @@
 import { animate, stagger } from 'animejs'
 
-const GRID_HEIGHT = 25
+const GRID_HEIGHT = 20
 const GRID_WIDTH = 25
 
 export const DotGrid = () => {
   const handleDotClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const index = e.currentTarget.dataset.index // Use `currentTarget` to get the correct element
+    const index = e.currentTarget.dataset.index
     if (!index) return
 
     animate('.dot-point', {

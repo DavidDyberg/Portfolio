@@ -36,22 +36,29 @@ function App() {
 
   return (
     <div className="mt-20">
-      <section className="sm:flex sm:flex-row sm:justify-between flex flex-col items-center gap-4">
-        <div className="flex flex-col gap-4">
-          <h1 className="text-5xl text-white font-medium">
-            {aboutQuery.data.firstName} {aboutQuery.data.lastName}
+      <section className="relative min-h-[300px] flex items-center justify-center top-25">
+        {/* DotGrid as background, right side */}
+        <div className="absolute inset-0 flex justify-end items-center z-0 pointer-events-auto">
+          <div className="w-1/2 h-full sm:w-full flex items-center justify-end">
+            <DotGrid />
+          </div>
+        </div>
+        <div className="relative z-10 w-full  flex flex-col gap-4 items-start p-8 pointer-events-none">
+          <h1 className="sm:text-7xl text-5xl text-white font-bold">
+            Hi, i'm {aboutQuery.data.firstName}
+            <span className="text-indigo-500">.</span>
           </h1>
           <p className="text-white text-3xl">
-            I'm a <span className="text-cyan-300">FullStack Developer</span>
+            I'm a{' '}
+            <span className="text-indigo-500 font-bold">
+              FullStack Developer
+            </span>
           </p>
-          <p className="text-white">{aboutQuery.data.bio}</p>
-        </div>
-        <div className="relative grid place-content-center px-8 py-12 ">
-          <DotGrid />
+          <p className="text-white sm:w-3/4">{aboutQuery.data.bio}</p>
         </div>
       </section>
 
-      <section className="pt-10">
+      <section className="pt-80">
         <h2 className="text-white text-4xl">Pinned projects</h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
           {pinnedProjectsQuery.data.map((project) => (
