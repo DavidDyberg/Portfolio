@@ -5,7 +5,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { ArrowUpRight, Check } from 'lucide-react'
+import { ArrowUpRight, Check, X } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
 import { useState } from 'react'
@@ -46,6 +46,8 @@ function RouteComponent() {
   const [description, setDescription] = useState(data.description)
   const [githubLink, setGithubLink] = useState(data.githubLink)
   const [liveDemo, setLiveDemo] = useState(data.liveDemo)
+  const [techInput, setTechInput] = useState('')
+  const [techStack, setTechStack] = useState<string[]>(data.techStack || [])
 
   const queryClient = useQueryClient()
   const successToaster = () =>
@@ -73,6 +75,7 @@ function RouteComponent() {
     formData.append('description', description)
     formData.append('githubLink', githubLink || '')
     formData.append('liveDemo', liveDemo || '')
+    techStack.forEach((tech) => formData.append('techStack', tech))
 
     if (selectedFile) {
       formData.append('image', selectedFile)
@@ -88,7 +91,20 @@ function RouteComponent() {
     setGithubLink(data.githubLink)
     setLiveDemo(data.liveDemo)
     setSelectedFile(null)
+    setTechStack(data.techStack || [])
+    setTechInput('')
     setIsEditing(false)
+  }
+
+  const handleAddTech = () => {
+    if (techInput.trim() && !techStack.includes(techInput.trim())) {
+      setTechStack([...techStack, techInput.trim()])
+      setTechInput('')
+    }
+  }
+
+  const handleRemoveTech = (tech: string) => {
+    setTechStack(techStack.filter((t) => t !== tech))
   }
 
   return (
@@ -193,14 +209,54 @@ function RouteComponent() {
           <h2 className="text-white text-base pb-4">
             <span className="font-bold">{data.title}</span> was created using:
           </h2>
-          {data.techStack && (
-            <ul className="ml-4">
-              {data.techStack.map((tech, index) => (
-                <li key={index} className="text-white list-disc">
-                  {tech}
-                </li>
-              ))}
-            </ul>
+          {isEditing ? (
+            <div>
+              <label className="block text-sm font-medium text-white">
+                Tech Stack
+              </label>
+              <div className="flex gap-2 mt-1">
+                <input
+                  type="text"
+                  placeholder="Add tech"
+                  value={techInput}
+                  onChange={(e) => setTechInput(e.target.value)}
+                  className="text-white bg-transparent border border-gray-600 p-2 rounded-lg"
+                />
+                <CustomButton
+                  label="Add"
+                  variant="primary"
+                  onClick={handleAddTech}
+                  className="rounded-2xl"
+                />
+              </div>
+              <div className="flex gap-2 flex-wrap mt-2">
+                {techStack.map((tech, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-indigo-500 text-white pt-3 pb-3 pl-3 pr-2 rounded text-sm flex items-center gap-1"
+                  >
+                    {tech}
+                    <X
+                      className="text-red-500 cursor-pointer hover:text-red-400"
+                      size={20}
+                      onClick={() => handleRemoveTech(tech)}
+                    />
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              {data.techStack && (
+                <ul className="ml-4">
+                  {data.techStack.map((tech, index) => (
+                    <li key={index} className="text-white list-disc">
+                      {tech}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
         </div>
 
