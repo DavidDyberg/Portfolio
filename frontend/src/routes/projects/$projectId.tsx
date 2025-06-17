@@ -1,7 +1,7 @@
 import { fetchProject } from '@/api-routes/projects'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { ArrowUpRight, X } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { CustomButton } from '@/components/Button'
 import { useState } from 'react'
