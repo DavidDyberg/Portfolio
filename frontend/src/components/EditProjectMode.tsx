@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CustomButton } from './Button'
 import FileUpload from './FileUpload'
 import LoadingSpinner from './LoadingSpinner'
-import { Check, X } from 'lucide-react'
+import { Check, CircleX } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateProject } from '@/api-routes/projects'
@@ -90,16 +90,16 @@ export function EditProjectMode({
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex sm:flex-row sm:items-center justify-between w-full flex-col-reverse gap-4">
         <input
-          className="text-5xl text-white font-medium border border-gray-600 rounded-lg pl-2"
+          className="text-5xl text-white font-medium border border-gray-600 lg:w-100 w-64 rounded-lg pl-2"
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <CustomButton
-          label="Leave edit mode"
+          label="Exit edit mode"
           variant="secondary"
           onClick={handleResetForm}
         />
@@ -126,7 +126,7 @@ export function EditProjectMode({
           />
           <FileUpload onFileSelect={(file) => setSelectedFile(file)} />
         </div>
-        <div className="flex flex-col gap-4 w-full pl-8">
+        <div className="flex flex-col gap-4 w-full lg:pl-8">
           <p className="text-white text-end">{description.length} / 500</p>
           <textarea
             placeholder="Add a description"
@@ -163,15 +163,15 @@ export function EditProjectMode({
             className="rounded-2xl"
           />
         </div>
-        <div className="flex gap-2 flex-wrap mt-2">
+        <div className="flex gap-4 flex-wrap pt-4 relative">
           {techStack.map((tech, idx) => (
             <span
               key={idx}
-              className="bg-indigo-500 text-white pt-3 pb-3 pl-3 pr-2 rounded text-sm flex items-center gap-1"
+              className="bg-indigo-500 text-white pt-3 pb-3 pl-3 pr-2 rounded text-sm flex items-center gap-1 relative"
             >
               {tech}
-              <X
-                className="text-red-500 cursor-pointer hover:text-red-400"
+              <CircleX
+                className="text-red-500 cursor-pointer hover:text-red-400 absolute top-[-10px] right-[-10px]"
                 size={20}
                 onClick={() => handleRemoveTech(tech)}
               />
@@ -206,24 +206,23 @@ export function EditProjectMode({
             id="sourceCodeLink"
           />
         </div>
-        <div className="flex gap-2">
-          <CustomButton
-            label={
-              mutation.isPending ? (
-                <div className="flex justify-center gap-2 items-center">
-                  <p className="">Save changes</p>
-                  <LoadingSpinner color="white" size="sm" />
-                </div>
-              ) : (
-                'Save changes'
-              )
-            }
-            disabled={mutation.isPending}
-            variant="primary"
-            className="mb-4"
-            onClick={handleEditSubmit}
-          />
-        </div>
+
+        <CustomButton
+          label={
+            mutation.isPending ? (
+              <div className="flex justify-center gap-2 items-center">
+                <p className="">Save changes</p>
+                <LoadingSpinner color="white" size="sm" />
+              </div>
+            ) : (
+              'Save changes'
+            )
+          }
+          disabled={mutation.isPending}
+          variant="primary"
+          className="mb-4"
+          onClick={handleEditSubmit}
+        />
       </div>
     </div>
   )
