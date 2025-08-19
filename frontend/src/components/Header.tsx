@@ -13,15 +13,11 @@ export default function Header() {
         <div className="px-2">
           <Link to="/projects">Projects</Link>
         </div>
-        {user ? (
+        {user && (
           <div className="px-2">
             <button className="cursor-pointer" onClick={logout}>
               LogOut
             </button>
-          </div>
-        ) : (
-          <div className="px-2">
-            <Link to="/login">Login</Link>
           </div>
         )}
       </nav>
