@@ -67,7 +67,7 @@ function RouteComponent() {
         )}
       </div>
       {!isEditing && (
-        <div className="flex flex-col gap-6 md:pt-8">
+        <div className="flex flex-col gap-6 md:pt-8 mb-20">
           <div className="flex flex-col lg:grid lg:grid-cols-[40%_60%] gap-8">
             <div className="flex-shrink-0 w-full md:max-w-lg aspect-w-16 aspect-h-9 mt-10 rounded-lg overflow-hidden bg-gray-900 flex items-center justify-center">
               <img
@@ -93,16 +93,18 @@ function RouteComponent() {
             )}
           </div>
           <div className="text-white font-bold flex gap-6">
-            <div className="flex items-center gap-1 hover:underline">
-              <ArrowUpRight
-                className="cursor-pointer"
-                size={24}
-                color="white"
-              />
-              <a href={data.liveDemo} target="_blank">
-                Link to live project
-              </a>
-            </div>
+            {data.liveDemo && (
+              <div className="flex items-center gap-1 hover:underline">
+                <ArrowUpRight
+                  className="cursor-pointer"
+                  size={24}
+                  color="white"
+                />
+                <a href={data.liveDemo} target="_blank">
+                  Link to live project
+                </a>
+              </div>
+            )}
             <div className="flex items-center gap-1 hover:underline">
               <ArrowUpRight
                 className="cursor-pointer"
