@@ -127,12 +127,12 @@ export function EditProjectMode({
           <FileUpload onFileSelect={(file) => setSelectedFile(file)} />
         </div>
         <div className="flex flex-col gap-4 w-full lg:pl-8">
-          <p className="text-white text-end">{description.length} / 500</p>
+          <p className="text-white text-end">{description.length} / 800</p>
           <textarea
             placeholder="Add a description"
             className="text-white bg-transparent border border-gray-600 p-4 rounded-lg w-full"
             rows={10}
-            maxLength={500}
+            maxLength={800}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
