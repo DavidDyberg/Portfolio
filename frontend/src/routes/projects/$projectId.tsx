@@ -75,7 +75,9 @@ function RouteComponent() {
                 alt={`Image of ${data.title}`}
               />
             </div>
-            <p className="text-white lg:pt-10">{data.description}</p>
+            <p className="text-white lg:pt-10 whitespace-pre-line">
+              {data.description}
+            </p>
           </div>
           <div>
             <h2 className="text-white text-base pb-4">
