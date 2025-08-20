@@ -7,7 +7,6 @@ import { DotGrid } from '@/components/DotGrid'
 
 export const Route = createFileRoute('/')({
   component: App,
-  pendingComponent: () => <div className="text-white">Loading...</div>,
   errorComponent: () => <div>Error loading data</div>,
   loader: async ({ context: { queryClient } }) => {
     await Promise.all([
