@@ -35,7 +35,7 @@ function App() {
   })
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 mb-20">
       <section className="relative min-h-[300px] flex items-center justify-center top-25">
         <div className="absolute inset-0 flex justify-end items-center z-0 pointer-events-auto">
           <div className="w-1/2 h-full sm:w-full flex items-center justify-end">

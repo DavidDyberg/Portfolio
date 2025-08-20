@@ -29,7 +29,7 @@ function RouteComponent() {
   })
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 mb-20">
       <div className="sm:flex sm:flex-row sm:justify-between flex flex-col gap-4">
         <h1 className="text-5xl text-white font-medium">My work</h1>
         {user && (
