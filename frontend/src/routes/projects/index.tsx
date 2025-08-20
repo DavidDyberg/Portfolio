@@ -9,7 +9,6 @@ import { useAuth } from '@/context/AuthContext'
 
 export const Route = createFileRoute('/projects/')({
   component: RouteComponent,
-  pendingComponent: () => <div className="text-white">Loading...</div>,
   errorComponent: () => <div>Error loading data</div>,
   loader: async ({ context: { queryClient } }) => {
     await queryClient.prefetchQuery({

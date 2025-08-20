@@ -12,7 +12,6 @@ import { EditProjectMode } from '@/components/EditProjectMode'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
-  pendingComponent: () => <div className="text-white">Loading...</div>,
   errorComponent: () => <div>Error loading data</div>,
   loader: async ({ context: { queryClient }, params }) => {
     await queryClient.prefetchQuery({
